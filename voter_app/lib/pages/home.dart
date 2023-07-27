@@ -3,8 +3,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:voter_app/pages/electionInfo.dart';
 import 'package:web3dart/web3dart.dart';
 
+import '../services/functions.dart';
 import '../utils/constants.dart';
 
 class Home extends StatefulWidget {
@@ -46,7 +48,22 @@ class _HomeState extends State<Home> {
           SizedBox(
               width: double.infinity,
               height: 50,
-              child: ElevatedButton(onPressed: (){}, child: const Text("start election")),
+              child: ElevatedButton(
+                onPressed: () async{
+                  if (controller.text.isNotEmpty) {
+                   await startElection(controller.text, ethClient!);
+                   // ignore: use_build_context_synchronously
+                   Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ElectionInfo(ethClient: ethClient!, electionName: controller.text,),
+                    ),
+                  );
+                  } 
+                },
+     
+                child: const Text("start election")
+              ),
             ),
         ],
       ),
